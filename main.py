@@ -56,7 +56,7 @@ def draw_text(
         text_surface = my_font.render(line, True, color)
         surface.blit(text_surface, position)
         position[1] += font.get_height()
-        font.set_point_size(size)
+        # font.set_point_size(size)
         font.set_bold(True)
 
 def restart_game():
@@ -118,6 +118,7 @@ paused = False
 running = True
 end = False
 playerWon = False
+debug = False
 
 while running:
     dt = clock.tick(FPS) / 1000 # s
@@ -128,10 +129,6 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
                 running = False
-            if event.key == pygame.K_r:
-                playerSpaceship.position = list(map.starting_position)
-                playerSpaceship.angle = map.starting_angle
-                playerSpaceship.velocity = 0
             if ((event.key == pygame.K_p) and end==False):
                 paused = not paused
             if event.key == pygame.K_f: 
@@ -142,6 +139,8 @@ while running:
                 end = False
                 playerWon = False
                 restart_game(); 
+            if ((event.key == pygame.K_d)): 
+                debug = not debug
 
     wall_ray_casts = {k: map.cast_ray_to_wall(enemySpaceship.position, enemySpaceship.angle + v) 
                       for k, v in sensors_angles.items()}
@@ -228,11 +227,12 @@ while running:
     if (enemySpaceship.shoot_timer == 0): enemyAmmo.draw(screen)
 
 
-    # for k, v in wall_ray_casts.items():
-    #     v.draw(screen, pygame.Color(99, 20, 20), width=2)
-        
-    for k, v in ship_ray_casts.items():
-        v.draw(screen, pygame.Color(0, 0, 100), width=2)
+    if (debug==True):
+        for k, v in wall_ray_casts.items():
+            v.draw(screen, pygame.Color(99, 20, 20), width=2)
+            
+        for k, v in ship_ray_casts.items():
+            v.draw(screen, pygame.Color(0, 0, 100), width=2)
 
     if (end==True and playerWon==False): 
         paused = True

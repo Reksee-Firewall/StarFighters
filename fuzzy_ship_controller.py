@@ -133,7 +133,7 @@ class FuzzyShipController(ShipController):
         self.simulation.input['e_head'] = enemy_sensors['head'].distance
         
         self.simulation.compute()
-        self.gas = max(0, self.simulation.output['gas']) # other are properly clamped in the base ship controller
+        self.gas = max(0, self.simulation.output['gas'])
         self.brake = self.simulation.output['brake']
         self.steer = self.simulation.output['steer']
         
